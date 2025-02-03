@@ -1,0 +1,14 @@
+2025-02-03T12:37:58.735314800Z, requestMethod='GET', uri='/holamundo', recurso=/holamundo, estado=true
+03-02-2025 14:02:06. [GET] /holamundo, OK: 200 OK - 200
+03-02-2025 14:02:52. [GET] /holamundo, OK: 200 OK}
+03-02-2025 14:05:07,[GET],/holamundo,OK,200 OK
+03-02-2025 14:15:32,[POST],/noticias/,OK,201 CREATED
+03-02-2025 14:16:06,[POST],/noticias/,OK,201 CREATED
+03-02-2025 14:22:38,[GET],/noticias/,FAILED,500 INTERNAL_SERVER_ERROR
+03-02-2025 14:23:19,[GET],/noticias/,OK,200 OK
+03-02-2025 16:52:49,[GET],/noticias/tituloprueba,FAILED,500 INTERNAL_SERVER_ERROR
+03-02-2025 16:55:50,[GET],/noticias/tituloprueba,FAILED,404 NOT_FOUND
+03-02-2025 16:59:49,[DELETE],/noticias/Noticia1,OK,200 OK
+03-02-2025 17:00:16,[DELETE],/noticias/titulo%20Prueba,OK,200 OK
+03-02-2025 17:07:01,[PUT],/noticias/Noticia2,OK,200 OK
+03-02-2025 17:08:19,[PUT],/noticias/Noticia2,OK,200 OK

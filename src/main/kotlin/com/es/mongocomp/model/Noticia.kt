@@ -17,7 +17,7 @@ data class Noticia(
     @Field
     val fechaPub: Date,
     @Field(name = "tag")
-    val tags: List<String>,
+    val tags: List<String>?,
     @Field(name = "user")
     val usuario: String
 )

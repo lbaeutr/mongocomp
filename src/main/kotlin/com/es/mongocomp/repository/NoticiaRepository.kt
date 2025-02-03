@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface NoticiaRepository : MongoRepository<Noticia, String> {
+
+    fun findByTitulo(titulo: String) : List<Noticia>?
+    fun deleteByTitulo(titulo: String)
 }
