@@ -3,6 +3,8 @@ package com.es.mongocomp.controller
 import com.es.mongocomp.exception.exceptions.NotFoundException
 import com.es.mongocomp.model.Log
 import com.es.mongocomp.model.Noticia
+import com.es.mongocomp.model.dto.NoticiaDTO
+import com.es.mongocomp.model.dto.NoticiaInsertDTO
 import com.es.mongocomp.repository.NoticiaRepository
 import com.es.mongocomp.utils.LogUtils
 import jakarta.servlet.http.HttpServletRequest
@@ -39,13 +41,34 @@ class NoticiaController {
     }
 
     @PostMapping("/")
-    fun insert(httpRequest: HttpServletRequest, @RequestBody noticia: Noticia) : ResponseEntity<Noticia> {
+    fun insert(
+        httpRequest: HttpServletRequest,
+        @RequestBody noticiaInsertDTO: NoticiaInsertDTO) : ResponseEntity<NoticiaDTO> {
 
 
-        val noticiaInsertada = noticiaRepository.insert(noticia)
+        // Mapear los campos del DTO al de Entity
+        val noticiaEntity: Noticia = Noticia(
+            null,
+            noticiaInsertDTO.titulo,
+            noticiaInsertDTO.cuerpo,
+            Date.from(Instant.now()),
+            listOf(),
+            noticiaInsertDTO.usuario
+        )
+
+        val noticiaInsertada = noticiaRepository.insert(noticiaEntity)
+
+        val noticiaResponseDTO = NoticiaDTO(
+            noticiaInsertada.titulo,
+            noticiaInsertada.cuerpo,
+            noticiaInsertada.fechaPub,
+            noticiaInsertada.tags,
+            noticiaInsertada.usuario
+        )
+
         logUtils.writeLog(Log(httpRequest.method, httpRequest.requestURI, true, HttpStatus.CREATED))
 
-        return ResponseEntity(noticiaInsertada, HttpStatus.CREATED)
+        return ResponseEntity(noticiaResponseDTO, HttpStatus.CREATED)
     }
 
     @GetMapping("/{titulo}")
@@ -86,14 +109,29 @@ class NoticiaController {
 
     }
 
-    @PutMapping("/{titulo}")
+    @PutMapping("/{id}")
     fun updateOne(
-        @PathVariable titulo: String,
-        @RequestBody nuevaNoticia: Noticia,
+        @PathVariable id: String,
+        @RequestBody noticiaToUpdate: Noticia,
         httpRequest: HttpServletRequest
     ) : ResponseEntity<Noticia>? {
 
-       return null
+       val noticiaExistente = noticiaRepository.findById(id).orElseThrow{
+           NotFoundException("No se ha encontrado la noticia")
+       }
+
+        val nuevaNoticia = noticiaExistente.copy(
+            titulo = noticiaToUpdate.titulo ?: noticiaExistente.titulo,
+            cuerpo = noticiaToUpdate.cuerpo ?: noticiaExistente.cuerpo,
+            fechaPub = noticiaToUpdate.fechaPub ?: noticiaExistente.fechaPub,
+            tags = noticiaToUpdate.tags ?: noticiaExistente.tags,
+            usuario = noticiaToUpdate.usuario ?: noticiaExistente.usuario,
+        )
+
+        val noticiaActualizada = noticiaRepository.save(nuevaNoticia)
+
+
+        return ResponseEntity(noticiaActualizada, HttpStatus.OK)
 
 
     }

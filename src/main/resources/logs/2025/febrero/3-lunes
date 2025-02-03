@@ -12,3 +12,5 @@
 03-02-2025 17:00:16,[DELETE],/noticias/titulo%20Prueba,OK,200 OK
 03-02-2025 17:07:01,[PUT],/noticias/Noticia2,OK,200 OK
 03-02-2025 17:08:19,[PUT],/noticias/Noticia2,OK,200 OK
+03-02-2025 18:58:17,[POST],/noticias/,OK,201 CREATED
+03-02-2025 19:04:41,[POST],/noticias/,OK,201 CREATED
