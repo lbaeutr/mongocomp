@@ -8,6 +8,6 @@ data class Usuario(
     val nombre: String,
     val nick: String,
     val estado: Boolean,
-    val telefonos: List<String>,
-    // No pongo direccion para hacer las pruebas
+    val telefonos: List<String?>,
+    val direccion: Direccion
 )

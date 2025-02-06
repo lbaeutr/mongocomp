@@ -1,4 +1,4 @@
-package com.es.mongocomp.model
+package com.es.mongocomp.domain
 
 import org.springframework.http.HttpStatusCode
 import java.time.Instant

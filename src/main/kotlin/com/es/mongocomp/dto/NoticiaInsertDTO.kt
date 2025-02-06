@@ -1,4 +1,4 @@
-package com.es.mongocomp.model.dto
+package com.es.mongocomp.dto
 
 data class NoticiaInsertDTO(
     val titulo: String,

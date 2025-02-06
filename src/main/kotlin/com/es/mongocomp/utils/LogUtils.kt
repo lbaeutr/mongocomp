@@ -1,6 +1,6 @@
 package com.es.mongocomp.utils
 
-import com.es.mongocomp.model.Log
+import com.es.mongocomp.domain.Log
 import org.springframework.stereotype.Component
 import java.io.BufferedWriter
 import java.nio.file.Files
@@ -13,22 +13,17 @@ import java.util.*
 import kotlin.io.path.notExists
 
 
-@Component
-class LogUtils {
-
-    fun prueba() {
-        println("HOLA MUNDO");
-    }
+object LogUtils {
 
     private val rutaLogs : String = "src/main/resources/logs"
 
-    fun createFichero(rutaFichero: Path) {
+    private fun createFichero(rutaFichero: Path) {
         // Si rutaFichero no existe, creo el sistema de archivos hasta el mismo
         if (rutaFichero.notExists()) {
             Files.createFile(rutaFichero)
         }
     }
-    fun createDirectory(rutaDirectory: Path) {
+    private fun createDirectory(rutaDirectory: Path) {
         // Si rutaFichero no existe, creo el sistema de archivos hasta el mismo
         if (rutaDirectory.notExists()) {
             Files.createDirectories(rutaDirectory)

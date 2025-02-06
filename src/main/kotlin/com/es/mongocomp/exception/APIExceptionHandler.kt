@@ -2,7 +2,7 @@ package com.es.mongocomp.exception
 
 import com.es.mongocomp.exception.exceptions.NotFoundException
 import com.es.mongocomp.exception.exceptions.ValidationException
-import com.es.mongocomp.model.Log
+import com.es.mongocomp.domain.Log
 import com.es.mongocomp.utils.LogUtils
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired

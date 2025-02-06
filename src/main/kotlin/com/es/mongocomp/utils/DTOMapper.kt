@@ -1,11 +1,11 @@
 package com.es.mongocomp.utils
 
+import com.es.mongocomp.model.Direccion
 import com.es.mongocomp.model.Usuario
-import com.es.mongocomp.model.dto.UsuarioDTO
+import com.es.mongocomp.dto.UsuarioDTO
 import org.springframework.stereotype.Component
 
-@Component
-class DTOMapper {
+object DTOMapper {
 
     fun userDTOToEntity(usuarioInsertDTO: UsuarioDTO) : Usuario {
         return Usuario(
@@ -13,7 +13,13 @@ class DTOMapper {
             usuarioInsertDTO.nombre,
             usuarioInsertDTO.nick,
             true,
-            listOf(usuarioInsertDTO.telefono1, usuarioInsertDTO.telefono2)
+            listOf(usuarioInsertDTO.telefono1, usuarioInsertDTO.telefono2),
+            Direccion(
+                usuarioInsertDTO.calle,
+                usuarioInsertDTO.numero,
+                usuarioInsertDTO.cp,
+                usuarioInsertDTO.ciudad
+            )
         )
     }
 
@@ -24,8 +30,29 @@ class DTOMapper {
             usuario.nombre,
             usuario.nick,
             usuario.telefonos[0] ?: "",
-            usuario.telefonos[1] ?: ""
+            usuario.telefonos[1] ?: "",
+            usuario.direccion.calle,
+            usuario.direccion.num,
+            usuario.direccion.cp,
+            usuario.direccion.ciudad
         )
+
+    }
+
+    fun listOfUserEntitiesToDTO(usuarios: List<Usuario>) : List<UsuarioDTO> {
+        return usuarios.map {
+            UsuarioDTO(
+                it._id,
+                it.nombre,
+                it.nick,
+                it.telefonos[0] ?: "",
+                it.telefonos[1] ?: "",
+                it.direccion.calle,
+                it.direccion.num,
+                it.direccion.cp,
+                it.direccion.ciudad
+            )
+        }
 
     }
 }
