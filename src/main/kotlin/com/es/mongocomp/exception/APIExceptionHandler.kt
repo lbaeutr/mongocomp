@@ -16,8 +16,6 @@ import java.lang.NumberFormatException
 @ControllerAdvice
 class APIExceptionHandler {
 
-    @Autowired
-    private lateinit var logUtils: LogUtils
 
     @ExceptionHandler(
         IllegalArgumentException::class
@@ -26,7 +24,7 @@ class APIExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     fun handleBadRequest(request: HttpServletRequest, e: Exception) : ErrorRespuesta {
-        logUtils.writeLog(Log(request.method, request.requestURI, false, HttpStatus.BAD_REQUEST))
+        LogUtils.writeLog(Log(request.method, request.requestURI, false, HttpStatus.BAD_REQUEST))
         return ErrorRespuesta(e.message!!, request.requestURI)
     }
 
@@ -35,7 +33,7 @@ class APIExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     fun handleNotFound(request: HttpServletRequest, e: Exception) : ErrorRespuesta {
-        logUtils.writeLog(Log(request.method, request.requestURI, false, HttpStatus.NOT_FOUND))
+        LogUtils.writeLog(Log(request.method, request.requestURI, false, HttpStatus.NOT_FOUND))
         return ErrorRespuesta(e.message!!, request.requestURI)
     }
 
@@ -43,7 +41,7 @@ class APIExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     fun handleGeneric(request: HttpServletRequest, e: Exception) : ErrorRespuesta {
-        logUtils.writeLog(Log(request.method, request.requestURI, false, HttpStatus.INTERNAL_SERVER_ERROR))
+        LogUtils.writeLog(Log(request.method, request.requestURI, false, HttpStatus.INTERNAL_SERVER_ERROR))
         return ErrorRespuesta(e.message!!, request.requestURI)
     }
 

@@ -2,6 +2,7 @@ package com.es.mongocomp.controller
 
 import com.es.mongocomp.exception.exceptions.NotFoundException
 import com.es.mongocomp.domain.Log
+import com.es.mongocomp.dto.NoticiaBetweenDatesDTO
 import com.es.mongocomp.model.Noticia
 import com.es.mongocomp.dto.NoticiaDTO
 import com.es.mongocomp.dto.NoticiaInsertDTO
@@ -61,8 +62,8 @@ class NoticiaController {
             noticiaInsertada.titulo,
             noticiaInsertada.cuerpo,
             noticiaInsertada.fechaPub,
-            noticiaInsertada.tags,
-            noticiaInsertada.usuario
+            noticiaInsertada.tag,
+            noticiaInsertada.user
         )
 
         LogUtils.writeLog(Log(httpRequest.method, httpRequest.requestURI, true, HttpStatus.CREATED))
@@ -123,8 +124,8 @@ class NoticiaController {
             titulo = noticiaToUpdate.titulo ?: noticiaExistente.titulo,
             cuerpo = noticiaToUpdate.cuerpo ?: noticiaExistente.cuerpo,
             fechaPub = noticiaToUpdate.fechaPub ?: noticiaExistente.fechaPub,
-            tags = noticiaToUpdate.tags ?: noticiaExistente.tags,
-            usuario = noticiaToUpdate.usuario ?: noticiaExistente.usuario,
+            tag = noticiaToUpdate.tag ?: noticiaExistente.tag,
+            user = noticiaToUpdate.user ?: noticiaExistente.user,
         )
 
         val noticiaActualizada = noticiaRepository.save(nuevaNoticia)
@@ -132,6 +133,21 @@ class NoticiaController {
 
         return ResponseEntity(noticiaActualizada, HttpStatus.OK)
 
+    }
+
+
+    @GetMapping("/getBetweenDates")
+    fun getNoticiasBetweenDates(
+        httpRequest: HttpServletRequest,
+        @RequestBody betweenDates: NoticiaBetweenDatesDTO
+    ) : ResponseEntity<List<Noticia>> {
+
+        val startDate = betweenDates.startDate
+        val endDate = betweenDates.endDate
+
+        val noticias = noticiaRepository.getNoticiasBetweenDates(startDate, endDate)
+
+        return ResponseEntity(noticias, HttpStatus.OK)
 
     }
 
