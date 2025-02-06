@@ -15,7 +15,7 @@ class UsuarioCustomRepositoryImpl : UsuarioCustomRepository {
     @Autowired
     private lateinit var mongoTemplate: MongoTemplate
     override fun findByCiudad(ciudad: String): List<Usuario> {
-        val database = mongoTemplate.db
+        val database = mongoTemplate.db // Obtengo la BD
         val collection = database.getCollection("collUsuarios", Usuario::class.java)
 
         val filtroCiudad = Filters.eq("direccion.ciudad", ciudad)
