@@ -1,60 +1,91 @@
-package com.es.mongocomp.service
-
-import com.es.mongocomp.exception.exceptions.NotFoundException
-import com.es.mongocomp.dto.UsuarioDTO
-import com.es.mongocomp.model.Usuario
-import com.es.mongocomp.repository.UsuarioRepository
-import com.es.mongocomp.utils.DTOMapper
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
-
-@Service
-class UsuarioService {
-
-    @Autowired
-    private lateinit var usuarioRepository: UsuarioRepository
-    @Autowired
-    private lateinit var apiService: ExternalApiService
-
-    fun insertUser(usuarioDTO: UsuarioDTO) : UsuarioDTO {
-
-        // Mapeo DTO a Entity
-        val usuario = DTOMapper.userDTOToEntity(usuarioDTO)
-
-        // Realizo una llamada a una API externa para obtener todas las provincias de España
-        val datosProvincias = apiService.obtenerDatosDesdeApi()
-
-        // Si los datos vienen rellenos entonces busco la provincia dentro del resultado de la llamada
-        if (datosProvincias != null) {
-            if(datosProvincias.data != null) {
-                datosProvincias.data.stream().filter {
-                    it.PRO == usuario.direccion.ciudad.uppercase()
-                }.findFirst().orElseThrow {
-                    NotFoundException("Provincia ${usuario.direccion.ciudad.uppercase()} no válida")
-                }
-            }
-        }
-        // Si todo ha ido bien, inserto el usuario
-        usuarioRepository.insert(usuario)
-
-        // Devuelvo un DTO
-        return DTOMapper.userEntityToDTO(usuario)
-    }
-
-    fun getUsuarioByCiudad(ciudad: String): List<UsuarioDTO> {
-
-        // Uso el método que he creado personalizado
-        val usuarios = usuarioRepository.findByCiudad(ciudad)
-
-        // Si no se encuentra, puedo lanzar una excepción
-        if (usuarios.isEmpty()) throw NotFoundException("Ciudad $ciudad no encontrada")
-
-        // Mapeo Entities a DTO
-        val usuariosDto = DTOMapper.listOfUserEntitiesToDTO(usuarios)
-
-        // Devuelvo List<DTO>
-        return usuariosDto
-
-    }
-
-}
+//package com.es.mongocomp.service
+//
+//import com.es.mongocomp.exception.exceptions.NotFoundException
+//import com.es.mongocomp.dto.UsuarioRegisterDTO
+//import com.es.mongocomp.model.Usuario
+//import com.es.mongocomp.repository.UsuarioRepository
+//import com.es.mongocomp.utils.DTOMapper
+//import org.apache.coyote.BadRequestException
+//import org.springframework.beans.factory.annotation.Autowired
+//import org.springframework.stereotype.Service
+//
+//@Service
+//class UsuarioService : UserDetailsService {
+//
+//    @Autowired
+//    private lateinit var usuarioRepository: UsuarioRepository
+//    @Autowired
+//    private lateinit var passwordEncoder: PasswordEncoder
+//    @Autowired
+//    private lateinit var apiService: ExternalApiService
+//
+//
+//    override fun loadUserByUsername(username: String?): UserDetails {
+//        var usuario: Usuario = usuarioRepository
+//            .findByUsername(username!!)
+//            .orElseThrow {
+//                UnauthorizedException("$username no existente")
+//            }
+//
+//        return User.builder()
+//            .username(usuario.username)
+//            .password(usuario.password)
+//            .roles(usuario.roles)
+//            .build()
+//    }
+//
+//    fun insertUser(usuarioInsertadoDTO: UsuarioRegisterDTO) : UsuarioDTO? {
+//
+//        if(usuarioInsertadoDTO.username.isBlank()
+//            || usuarioInsertadoDTO.email.isBlank()
+//            || usuarioInsertadoDTO.password.isBlank()
+//            || usuarioInsertadoDTO.passwordRepeat.isBlank()){
+//
+//            throw BadRequestException("Uno o más campos vacios")
+//        }
+//
+//        if(usuarioRepository.findByUsername(usuarioInsertadoDTO.username).isPresent){
+//            throw Exception("Usuario ${usuarioInsertadoDTO.username} ya está registrado")
+//        }
+//
+//        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex()
+//
+//        if (!emailRegex.matches(usuarioInsertadoDTO.email)) {
+//            throw BadRequestException("El email no es válido")
+//        }
+//
+//        if (usuarioInsertadoDTO.password != usuarioInsertadoDTO.passwordRepeat) {
+//            throw BadRequestException("Las contraseñas no coinciden")
+//        }
+//
+//        val usuario = DTOMapper.usuarioRegisteredDTOToEntity(usuarioInsertadoDTO, passwordEncoder)
+//        val datosProvincias = apiService.obtenerDatosDesdeApi()
+//
+//        var cpro = ""
+//
+//        if(datosProvincias?.data != null) {
+//            datosProvincias.data.stream().filter {
+//                if (it.PRO == usuario.direccion.provincia.uppercase()) {
+//                    cpro = it.CPRO
+//                }
+//                it.PRO == usuario.direccion.provincia.uppercase()
+//            }.findFirst().orElseThrow {
+//                NotFoundException("Provincia ${usuario.direccion.provincia.uppercase()} no válida.")
+//            }
+//        }
+//
+//        val datosMunicipios = apiService.obtenerMunicipios(cpro)
+//
+//        if(datosMunicipios?.data != null) {
+//            datosMunicipios.data.stream().filter {
+//                it.DMUN50 == usuario.direccion.municipio.uppercase()
+//            }.findFirst().orElseThrow {
+//                NotFoundException("Municipio ${usuario.direccion.municipio.uppercase()} no válido.")
+//            }
+//        }
+//
+//        usuarioRepository.insert(usuario)
+//
+//        return DTOMapper.usuarioEntityToUsuarioDTO(usuario)
+//    }
+//}
