@@ -2,6 +2,7 @@ HELP.md
 .gradle
 build/*
 !build/libs/ # excepto build/libs/ --> no ignorar
+!build/libs/*.war  # Asegurar que se incluya cualquier archivo .war
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
